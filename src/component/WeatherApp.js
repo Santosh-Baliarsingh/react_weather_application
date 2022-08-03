@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 
+
 export default function WeatherApp() {
   const [search, setSearch] = useState("Delhi");
   const [input, setInput] = useState("");
   const [data, setData] = useState([]);
+  const apiKey = process.env.REACT_APP_WEATHER_APP_API
+  
 
   
   useEffect(() => {
     let componentMounted = true;
     const fetchWeather = async () => {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=3d046bdd0dfaa9073fa6f15fca11d49a`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=${apiKey}`;
 
       const response = await fetch(url);
 
@@ -23,7 +26,7 @@ export default function WeatherApp() {
     };
 
     fetchWeather();
-  }, [search]);
+  }, [search,apiKey]);
 
   // Dynamic Emoji
   let emoji = null;
@@ -43,7 +46,7 @@ export default function WeatherApp() {
     }
   } 
   else {
-     return <p>Enter Corrent City Name</p>;
+     return <p>Enter Correct City Name</p>;
   }
 
   // Current Date
