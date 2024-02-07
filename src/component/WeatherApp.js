@@ -5,28 +5,30 @@ export default function WeatherApp() {
   const [search, setSearch] = useState("Delhi");
   const [input, setInput] = useState("");
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const apiKey = process.env.REACT_APP_WEATHER_APP_API
   
 
   
   useEffect(() => {
-    let componentMounted = true;
     const fetchWeather = async () => {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${search}&units=metric&appid=${apiKey}`;
 
       const response = await fetch(url);
-
-      if (componentMounted) {
-        setData(await response.json());
-        // console.log(data);
-      }
-      return () => {
-        componentMounted = false;
-      };
+      setData(await response.json());
+      setLoading(false);
     };
 
     fetchWeather();
   }, [search,apiKey]);
+
+  if (loading) {
+    return null;
+  }
+
+  if (!data || !data.main) {
+    return <p style={{textAlign : "center"}}>Enter Correct City Name</p>;
+  }
 
   // Dynamic Emoji
   let emoji = null;
@@ -45,9 +47,6 @@ export default function WeatherApp() {
       emoji = "fa fa-smog";
     }
   } 
-  else {
-     return <p>Enter Correct City Name</p>;
-  }
 
   // Current Date
   let current = new Date();
